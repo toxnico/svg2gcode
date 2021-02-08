@@ -1,0 +1,66 @@
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="bootstrap/bootstrap.css">
+
+    <title>SVG to GCODE converter (this one should work properly)</title>
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 text-center">
+                
+                <h1>SVG to GCODE converter</h1>
+                <h3>(One that works properly)</h3>
+                <h3>(At least for my cases)</h3>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-sm">
+
+                <form id="frm">
+
+                    <div class="form-group">
+                        <textarea class="form-control" name="svg" rows="10"
+                            placeholder="Paste your SVG text here (without the XML header, only &lt;svg&gt;...&lt;/svg&gt;"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="">Segment length</label>
+                        <input type="text" class="form-control" placeholder="Segment length" name="segmentLength" value="1" />
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" onclick="convert()">Convert to GCode</button>
+                    </div>
+                    <div id="svg-container" style="display:block;"></div>
+                </form>
+
+            </div>
+
+            <div class="col-sm">
+                <div class="form-group">
+
+                    <textarea rows="10" placeholder="Your G-Code will show up here" id="txt-gcode"
+                        class="form-control"></textarea>
+                </div>
+                <div>
+
+                    <canvas width="500px" height="500px" id="cnv"></canvas>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+    <script type="text/javascript" src="snap.svg/snap.svg-min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+</body>
+
+</html>
