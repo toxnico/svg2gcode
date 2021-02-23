@@ -1,6 +1,6 @@
 # Yet another SVG to GCode converter.
 
-I have teted a few, no one worked as expected, so I took my best js skills to make one.
+I have tested a few, no one worked as expected, so I took my best js skills (haha) to make my own converter.
 It worked for many of my cases.
 
 # Why javascript ? Why inside a browser ?
