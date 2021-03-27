@@ -122,8 +122,6 @@ function process(svg, segmentLength) {
 
     svg.innerHTML = preprocess(paths);
     
-
-
     paths = Array.from(svg.querySelectorAll("path"));
 
     paths = removeDuplicatePaths(paths);
