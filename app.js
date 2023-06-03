@@ -1,6 +1,12 @@
-var PEN_UP = "M3 S100";
-var PEN_DOWN = "M3 S0";
-var PEN_DELAY = 0.3;
+//PEN CONFIGURATION
+//var PEN_UP = "M3 S100";
+//var PEN_DOWN = "M3 S0";
+//var PEN_DELAY = 0.3;
+
+//LASER
+var PEN_UP = "M5";
+var PEN_DOWN = "M3";
+var PEN_DELAY = 0.0;
 
 function header() {
     var lines = [
@@ -139,15 +145,45 @@ function process(svg, segmentLength) {
     
     ctx.clearRect(0,0,499,499);
 
+    allGCode.push(penUp());
+
     for (var i = 0; i < allPoints.length; i++) {
 
-        
-        drawPoints(ctx, allPoints[i]);
+        var path = allPoints[i];
+        drawPoints(ctx, path);
 
-        var gcode = pointsToGCode(allPoints[i]);
+        var mustPenUpDown = false;
+        if(i==0)
+            mustPenUpDown = true;
+        //do we need to lift pen, move and lower pen ?
+        if(i > 0)
+        {
+            var previousPath = allPoints[i-1];
+            var previousPoint = previousPath[previousPath.length-1];
+            var firstPoint = allPoints[i][0];
+            var dist = Math.sqrt(Math.pow((firstPoint.x - previousPoint.x),2) + Math.pow((firstPoint.y - previousPoint.y),2));
+            if(dist > segmentLength)
+                mustPenUpDown = true;
+            
+        }
+        if(mustPenUpDown)
+            allGCode.push(penUp());
+
+        //rapid move:
+        allGCode.push(`G0 X${path[0].x} Y${-path[0].y}`);
+
+        if(mustPenUpDown)
+            allGCode.push(penDown());
+
+        //generate gcode for this path
+        var gcode = pointsToGCode(path);
+
         allGCode.push(gcode.join("\n"));
+        allGCode.push("(.v.)")
 
     }
+
+    allGCode.push(penUp());
 
     allGCode.push(footer());
     return allGCode.join("\n");
@@ -228,17 +264,17 @@ function pointsToGCode(points) {
 
     for (var i = 0; i < points.length; i++) {
         var pt = points[i];
-        if (i == 0) {
+        /*if (i == 0) {
             //first point : rapid move
             output.push(`G0 X${pt.x} Y${-pt.y}`);
             output.push(penDown());
         }
-        else {
+        else {*/
             //other points : normal move
             output.push(`G1 X${pt.x} Y${-pt.y}`);
-        }
+        //}
     }
-    output.push(penUp());
+    //output.push(penUp());
     
     return output;
 }
